@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : JDBC.xml
+    Created on : 5 décembre 2011, 14:20
+    Author     : melarga.coulibaly
+    Description:
+        Purpose of the document follows.
+-->
+<!--
+        Paramètres généraux de l'application
+		
+		- Base de données
+		- Sockets
+		- SMS Gateways
+ jdbc:mysql://localhost:3306/mbank
+-->
+<JDBC>
+    <MODE>Normal</MODE>
+    <DATASOURCE>jdbc/wdb</DATASOURCE>
+    <DRIVER>oracle.jdbc.driver.OracleDriver</DRIVER>
+    <URL>jdbc:oracle:thin:@10.100.10.2:1521:DWH</URL>
+    <BACIURL>jdbc:oracle:thin:@10.181.0.2:1521:BACI</BACIURL>
+    <BABNURL>jdbc:oracle:thin:@10.195.229.1:1521:BABN</BABNURL>
+    <BATGURL>jdbc:oracle:thin:@10.195.229.1:1521:BATG</BATGURL>
+    <BABFURL>jdbc:oracle:thin:@10.195.229.1:1521:BABF</BABFURL>
+    <BANEURL>jdbc:oracle:thin:@10.195.229.1:1521:BANE</BANEURL>
+    <BAMLURL>jdbc:oracle:thin:@10.195.229.1:1521:BAML</BAMLURL>
+    <BASNURL>jdbc:oracle:thin:@10.195.229.1:1521:BASN</BASNURL>
+    <BACMURL>jdbc:oracle:thin:@10.181.0.2:1521:BACM</BACMURL>
+    <BAGBURL>jdbc:oracle:thin:@10.181.0.2:1521:BACI</BAGBURL>
+    <USER>BACI</USER>
+    <PASSWORD>baci</PASSWORD>
+    <BACIUSER>EXTRACT</BACIUSER>
+    <BACIPASSWORD>extract</BACIPASSWORD>
+    <BABNUSER>EXTRACT</BABNUSER>
+    <BABNPASSWORD>extract</BABNPASSWORD>
+    <BATGUSER>EXTRACT</BATGUSER>
+    <BATGPASSWORD>extract</BATGPASSWORD>
+    <BABFUSER>EXTRACT</BABFUSER>
+    <BABFPASSWORD>extract</BABFPASSWORD>
+    <BANEUSER>EXTRACT</BANEUSER>
+    <BANEPASSWORD>extract</BANEPASSWORD>
+    <BAMLUSER>EXTRACT</BAMLUSER>
+    <BAMLPASSWORD>extract</BAMLPASSWORD>
+    <BASNUSER>EXTRACT</BASNUSER>
+    <BASNPASSWORD>extract</BASNPASSWORD>
+    <BACMUSER>EXTRACT</BACMUSER>
+    <BACMPASSWORD>extract</BACMPASSWORD>
+    <BAGBUSER>EXTRACT2</BAGBUSER>
+    <BAGBPASSWORD>extract2</BAGBPASSWORD>    
+    <TIMEOUT>10</TIMEOUT>    
+    <ORIONHOST>10.181.6.17</ORIONHOST>
+    <ORIONCERTIF>10.195.100.225</ORIONCERTIF>
+    <MONEDIAHOST>10.195.100.115</MONEDIAHOST>
+    <MONEYCASHURL>http://agents.moneycash.ch</MONEYCASHURL>
+    <REPORTDESIGNPATH>C:\\SMBServices\\Reportdesigns\\</REPORTDESIGNPATH>
+    <REPORTOUTPUTPATH>C:\\SMBServices\\Reportoutputs\\</REPORTOUTPUTPATH>
+    <REPORTDBDRIVER>oracle.jdbc.driver.OracleDriver</REPORTDBDRIVER>
+    <REPORTDBURL>jdbc:oracle:thin:@192.168.1.145:1521:BACI</REPORTDBURL>
+    <REPORTDBUSER>BACI</REPORTDBUSER>
+    <REPORTDBPASS>bacitst41</REPORTDBPASS>
+    <EXTRAITMAILCONTENT>Bonjour, merci de trouver ci-joint votre extrait de compte.</EXTRAITMAILCONTENT>
+    <RELEVEMAILCONTENT>Bonjour, merci de trouver ci-joint votre releve de compte.</RELEVEMAILCONTENT>    
+        
+</JDBC>

@@ -1,0 +1,29 @@
+{"Paiement": [
+    {   "facturier":"CIE",
+        "url": "https://apinmpf.cie.ci/CIENMPF_ApiNmpf",
+        "username":"P05",
+        "password":"baci",
+        "dbUrl":"jdbc:postgresql://10.181.5.23:5432/efacturepro",
+        "dbdriver":"org.postgresql.Driver", 
+        "dbuser":"admin",
+        "dbpassword":"6TFC7YGV",
+        "prefixe":"PAIE|C|W|",
+        "compte": "XOF104660003",
+        "idfacturier":"P05",
+        "oper": "D24"
+    },
+    {   "facturier":"SODECI",
+        "url": "https://apinmpf.sodeci.ci/SODECINMPF_ApiNmpf",
+        "username":"270",
+        "password":"baci",
+        "dbUrl":"jdbc:postgresql://10.181.5.23:5432/efacturepro",
+        "dbdriver":"org.postgresql.Driver", 
+        "dbuser":"admin",
+        "dbpassword":"6TFC7YGV",
+        "prefixe":"PAIE|A|W|",
+        "compte": "XOF104660005",
+        "idfacturier":"270",
+        "oper": "D24"
+    }
+]
+}

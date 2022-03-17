@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://192.168.220.45:9380/TWSEFACTURE/services?wsdl" uri="src/conf/xml-resources/web-services/Efacture/wsdl/192.168.220.45_9380/TWSEFACTURE/services.wsdl"/>
+    <system systemId="http://192.168.220.45:9380/TWSEFACTURE/services?xsd=1" uri="src/conf/xml-resources/web-services/Efacture/wsdl/192.168.220.45_9380/TWSEFACTURE/services.xsd_1.xsd"/>
+    <system systemId="http://192.168.220.45:9380/TWSEFACTURE/services?xsd=2" uri="src/conf/xml-resources/web-services/Efacture/wsdl/192.168.220.45_9380/TWSEFACTURE/services.xsd_2.xsd"/>
+    <system systemId="http://192.168.220.45:9380/TWSEFACTURE/services?xsd=3" uri="src/conf/xml-resources/web-services/Efacture/wsdl/192.168.220.45_9380/TWSEFACTURE/services.xsd_3.xsd"/>
+    <system systemId="http://192.168.220.45:8080/TWSEFACTURE/services?wsdl" uri="src/conf/xml-resources/web-services/Efacture/wsdl/192.168.220.45_8080/TWSEFACTURE/services.wsdl"/>
+    <system systemId="http://192.168.220.45:8080/TWSEFACTURE/services?xsd=1" uri="src/conf/xml-resources/web-services/Efacture/wsdl/192.168.220.45_8080/TWSEFACTURE/services.xsd_1.xsd"/>
+    <system systemId="http://192.168.220.45:8080/TWSEFACTURE/services?xsd=2" uri="src/conf/xml-resources/web-services/Efacture/wsdl/192.168.220.45_8080/TWSEFACTURE/services.xsd_2.xsd"/>
+    <system systemId="http://192.168.220.45:8080/TWSEFACTURE/services?xsd=3" uri="src/conf/xml-resources/web-services/Efacture/wsdl/192.168.220.45_8080/TWSEFACTURE/services.xsd_3.xsd"/>
+</catalog>

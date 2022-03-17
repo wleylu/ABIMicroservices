@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.2.8 svn-revision#13980. --><xs:schema xmlns:tns="http://temenos.com/TWSEFACTURE" xmlns:ns1="http://temenos.com/TNAEFACTUREMAIN" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://temenos.com/TWSEFACTURE">
+
+<xs:import namespace="http://temenos.com/TNAEFACTUREMAIN" schemaLocation="http://192.168.220.45:8080/TWSEFACTURE/services?xsd=2"></xs:import>
+
+<xs:element name="TNAEFACTUREMAIN" type="tns:TNAEFACTUREMAIN"></xs:element>
+
+<xs:element name="TNAEFACTUREMAINResponse" type="tns:TNAEFACTUREMAINResponse"></xs:element>
+
+<xs:complexType name="TNAEFACTUREMAIN">
+<xs:sequence>
+<xs:element name="WebRequestCommon" type="tns:webRequestCommon" minOccurs="0"></xs:element>
+<xs:element name="TNAEFACTUREMAINType" type="tns:enquiryInput" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="webRequestCommon">
+<xs:sequence>
+<xs:element name="company" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="password" type="xs:string"></xs:element>
+<xs:element name="userName" type="xs:string"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="enquiryInput">
+<xs:sequence>
+<xs:element name="enquiryInputCollection" type="tns:enquiryInputCollection" nillable="true" minOccurs="0" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="enquiryInputCollection">
+<xs:sequence>
+<xs:element name="columnName" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="criteriaValue" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="operand" type="xs:string" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="TNAEFACTUREMAINResponse">
+<xs:sequence>
+<xs:element name="Status" type="tns:Status" minOccurs="0"></xs:element>
+<xs:element name="TNAEFACTUREMAINType" type="ns1:TNAEFACTUREMAINType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Status">
+<xs:sequence>
+<xs:element name="transactionId" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="messageId" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="successIndicator" type="tns:successIndicator" minOccurs="0"></xs:element>
+<xs:element name="application" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="messages" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="successIndicator">
+<xs:restriction base="xs:string">
+<xs:enumeration value="Success"></xs:enumeration>
+<xs:enumeration value="TWSError"></xs:enumeration>
+<xs:enumeration value="T24Error"></xs:enumeration>
+<xs:enumeration value="T24Override"></xs:enumeration>
+<xs:enumeration value="T24Offline"></xs:enumeration>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>

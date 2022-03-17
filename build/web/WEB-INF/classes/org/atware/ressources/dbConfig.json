@@ -1,0 +1,6 @@
+{"DBFILIALE":[
+    {"filiale":"BAML","user":"EXTRACT","password":"extract","url":"jdbc:oracle:thin:@192.168.220.17:1521:BAML","driver":"oracle.jdbc.OracleDriver"},
+    {"filiale":"BABF","user":"BABF202","password":"babf202bkp31","url":"jdbc:oracle:thin:@192.168.220.17:1521:BABF","driver":"oracle.jdbc.OracleDriver"},
+    {"filiale":"BASN","user":"EXTRACT","password":"extract","url":"jdbc:oracle:thin:@192.168.220.17:1521:BASN","driver":"oracle.jdbc.OracleDriver"}
+]}
+
