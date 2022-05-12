@@ -116,6 +116,7 @@ public class ConfigInfos {
     private final String t24wsaddress;
     private final String t24wsdomain;
     private final String t24wsname;
+    private final String category;
         
     
     public ConfigInfos() throws FileNotFoundException, IOException
@@ -215,10 +216,13 @@ public class ConfigInfos {
          this.companyt24ef=appConfig.getProperty("COMPANYT24EF");
          this.t24wsaddress = appConfig.getProperty("T24WSADRESS");
          this.t24wsdomain = appConfig.getProperty("T24WSDOMAIN");
-        this.t24wsname = appConfig.getProperty("T24WSNAME");
-        
-        
+        this.t24wsname = appConfig.getProperty("T24WSNAME"); 
+        this.category =appConfig.getProperty("CATEG"); 
     }     
+
+    public String getCategory() {
+        return category;
+    }
     
     
    

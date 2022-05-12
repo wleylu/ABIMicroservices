@@ -5,9 +5,14 @@
         <group>
             <file>file:/C:/Projets/ABIMicroservices/src/java/com/atware/controller/InterfaceEfactureWS.java</file>
             <file>file:/C:/Projets/ABIMicroservices/src/java/com/atware/utils/ServiceResultatJson.java</file>
+            <file>file:/C:/Projets/ABIMicroservices/src/java/org/atware/ressources/jsonpay.json</file>
+            <file>file:/C:/Projets/ABIMicroservices/src/java/com/atware/controller/AppNmpf.java</file>
+            <file>file:/C:/Projets/ABIMicroservices/src/java/org/atware/ressources/config.properties</file>
             <file>file:/C:/Projets/ABIMicroservices/src/java/com/atware/controller/AppEfactureWST24.java</file>
-            <file>file:/C:/Projets/ABIMicroservices/src/java/com/atware/controller/AppGestToken.java</file>
-            <file>file:/C:/Projets/ABIMicroservices/src/java/com/atware/controller/AppMicroAnnulTransact.java</file>
+            <file>file:/C:/Projets/ABIMicroservices/src/java/org/atware/bean/RefAnnulation.java</file>
+            <file>file:/C:/Projets/ABIMicroservices/src/java/com/abi/microservices/ServicesResource.java</file>
+            <file>file:/C:/Projets/ABIMicroservices/src/java/org/atware/bean/AnnulTransT24.java</file>
+            <file>file:/C:/Projets/ABIMicroservices/src/java/com/abi/microservices/ApiNMPFServices.java</file>
         </group>
     </open-files>
 </project-private>

@@ -35,7 +35,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import org.atware.bean.AccessContectUser;
+import org.atware.bean.AnnulTransT24;
 import org.atware.bean.AuditInfos;
+import org.atware.bean.RefAnnulation;
 import org.atware.bean.TransactionInfo;
 import org.atware.bean.TransactionT24;
 import org.json.JSONException;
@@ -54,6 +56,7 @@ public class ServicesResource {
     private AppMicroSignaletique appCtrl;
     private HttpServletRequest httpServletRequest;
     private Utility utility;
+    private   AppEfactureWST24 facture;
     
     
   
@@ -61,6 +64,12 @@ public class ServicesResource {
      * Creates a new instance of ServicesResource
      */
     public ServicesResource() {
+        
+        try {
+            this.facture = new AppEfactureWST24();
+        } catch (ParseException ex) {
+            Logger.getLogger(ServicesResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
@@ -633,9 +642,7 @@ public class ServicesResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/clientInfT24/{client}")
     public String getSignaletiqueT24(@PathParam("client") String client ) throws ParseException{
-        AppEfactureWST24 facture = new AppEfactureWST24();
-              
-       return facture.getInfoClient(client);
+            return facture.getInfoClient(client);
    
     }
     
@@ -647,13 +654,27 @@ public class ServicesResource {
     public String setComptaT24(String paiement) throws ParseException{        
         TransactionT24 oper = new TransactionT24();
         oper = convertJsonTransaction(paiement);        
-       AppEfactureWST24 facture = new AppEfactureWST24();
+     
        //String retour = new Gson().toJson(oper);
          
         return facture.setComptaTransaction(oper);
     }
     
     
+     //Méthode d'annulation de transaction T24
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/annulrefT24")
+    @Consumes("application/json")
+    public String annulrefT24(String refFT) throws ParseException, IOException{        
+     RefAnnulation opeAnnul =convertJsonAnnulT24(refFT);
+        return facture.setAnnulationTransact(opeAnnul);
+    }
+    
+    
+    
+    
+    //conversion de la trame de transaction paiement
     private TransactionT24 convertJsonTransaction(String oper){
         TransactionT24 operT24 = new TransactionT24();
         
@@ -676,6 +697,29 @@ public class ServicesResource {
                 
         return operT24;
     }
+    
+    
+     //conversion de la trame d'annumlation transaction paiement
+    private RefAnnulation convertJsonAnnulT24(String oper){
+        RefAnnulation operT24 = new RefAnnulation();
+        
+        try {
+            JSONObject oper1 = new JSONObject(oper);
+            operT24.setRefFT(oper1.getString("refFT"));
+            operT24.setFacturier(oper1.getString("facturier"));                 
+               
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(ServicesResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+        return operT24;
+    }
+    
+    
+    
+    
+  
    
 }
 

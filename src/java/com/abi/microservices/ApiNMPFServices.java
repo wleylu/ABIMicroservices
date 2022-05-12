@@ -52,10 +52,9 @@ public class ApiNMPFServices {
      */
   
 
-    public ApiNMPFServices() throws Exception {
-        nmpf = new AppNmpf("CIE");
-        nmpfSodeci= new AppNmpf("SODECI");
-        connectedEf = new AppAuthorisation();
+    public ApiNMPFServices()  {      
+      
+       
     }
     
     
@@ -73,7 +72,8 @@ public class ApiNMPFServices {
     @POST
     @Path("/authConnect")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getAutorisation(@Context HttpServletRequest request,@HeaderParam("login") String login) throws  Exception{   
+    public String getAutorisation(@Context HttpServletRequest request,@HeaderParam("login") String login) throws  Exception{  
+          connectedEf = new AppAuthorisation();
           String text = request.getRemoteHost();
           AccessContectUser user = new AccessContectUser();
           user.setAdip(text);
@@ -82,6 +82,8 @@ public class ApiNMPFServices {
         return connectedEf.appConnexionuUser(user);
           
     }
+    
+    /*
     
     @GET
     @Path("/getfacturecie/{facture}")
@@ -118,10 +120,9 @@ JSONObject json= null;
   
         
          return text2;
-
-
           
     }
+    */
     
     @POST
     @Path("/authef")
@@ -141,8 +142,8 @@ JSONObject json= null;
     
      @GET
    @Path("/consulfact/cie/{facture}")
-    public String consulterFacturecie(@PathParam("facture") String facture ) throws IOException {     
-     
+    public String consulterFacturecie(@PathParam("facture") String facture ) throws IOException {  
+         nmpf = new AppNmpf("CIE");
         return nmpf.consulterFactureCIE(facture);
     }
     
@@ -151,14 +152,14 @@ JSONObject json= null;
     @Path("/reglFacture/cie")
     @Consumes("application/json")    
     public String reglementFactureCIE(String fact){
-        
+         nmpf = new AppNmpf("CIE");
         return nmpf.reglementFactureCIE(fact);
     }
     
    @GET
    @Path("/consulfact/sodeci/{facture}")
     public String consulterFacturesodeci(@PathParam("facture") String facture ) throws IOException {     
-     
+          nmpfSodeci= new AppNmpf("SODECI");
         return nmpfSodeci.consulterFactureSODECI(facture);
     }
     
@@ -169,7 +170,7 @@ JSONObject json= null;
     @Path("/reglFacture/sodeci")
     @Consumes("application/json")    
     public String reglementFacturesodeci(String fact){
-        
+        nmpfSodeci= new AppNmpf("SODECI");
         return nmpfSodeci.reglementFactureSODECI(fact);
     }
 

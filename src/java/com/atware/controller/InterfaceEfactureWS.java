@@ -25,6 +25,7 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import org.atware.bean.ConfigInfos;
 import com.atware.log.AppLogger;
+import com.atware.utils.ServiceResultatJson;
 import com.temenos.tnaefacturemain.TNAEFACTUREMAINType;
 import com.temenos.twsefacture.EnquiryInput;
 import com.temenos.twsefacture.EnquiryInputCollection;
@@ -36,8 +37,12 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.ws.Holder;
+import org.atware.bean.AnnulTransT24;
 import org.atware.bean.ConfigPay;
 import org.atware.bean.TransactionT24;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -142,7 +147,7 @@ public class InterfaceEfactureWS {
 
 
     //signaletique clients
-    public String getSiganaletique(String client) throws ParseException{
+    public String getSignaletique(String client) throws ParseException{
         String resultat=null;
         
         //String retour=null;
@@ -166,13 +171,13 @@ public class InterfaceEfactureWS {
                          resultat = tnaefacturemaintype0.value.get(0).getGTNAEFACTUREMAINDetailType().getMTNAEFACTUREMAINDetailType().get(0).getREPONSEEFACTURE();
                      }
                      else {
-                         resultat = "{\"RESULTSET\":[{\"Statut\":\"0\",\"StatutMsg\":\"DEMANDE ACCEPTE\",\"StatutData\":[{Erreur:\"ERREUR DE TRITEMENT\"}]}]}";
+                         resultat = "{\"RESULTSET\":[{\"Statut\":\"1\",\"StatutMsg\":\"DEMANDE ACCEPTE\",\"StatutData\":[{Erreur:\"ERREUR DE TRITEMENT\"}]}]}";
                           log=new AppLogger("Problème ouverture du port WS T24 ==> méthode: InterfaceEfactureWS.getSiganaletique ===> "+new AppLogger().formatageDateHeure());
                      }
 
 
             } catch(Exception ex) {
-                resultat = "{\"RESULTSET\":[{\"Statut\":\"0\",\"StatutMsg\":\"DEMANDE ACCEPTE\",\"StatutData\":[{Erreur:\"ERREUR DE TRITEMENT\"}]}]}";
+                resultat = "{\"RESULTSET\":[{\"Statut\":\"1\",\"StatutMsg\":\"DEMANDE ACCEPTE\",\"StatutData\":[{Erreur:\"ERREUR DE TRITEMENT\"}]}]}";
                 log=new AppLogger("Erreur WS T24 ==> méthode: InterfaceEfactureWS.getSiganaletique ===> "+new AppLogger().formatageDateHeure()+" ==>"+ex.getMessage());
                
             }
@@ -181,10 +186,10 @@ public class InterfaceEfactureWS {
 
     }
 
+    //fin signaletique
     
     //comptabilisation ecriture
     
-    //signaletique clients
     public String setCompta(TransactionT24 oper ) throws ParseException{
     //    TransactionT24 oper = new TransactionT24();
         ConfigPay configPay = new ConfigPay(oper.getFacturier());
@@ -197,7 +202,7 @@ public class InterfaceEfactureWS {
                  +"|"+oper.getMntTimbre()+"|"+oper.getLibelleOper()+"|"+oper.getIdentifiantFacture();
         */
          
-          String trameOper = configPay.getPrefixe()+oper.getClient()+"|"+configPay.getIdfacturier()+"|"+log.getrRfExtdate()+"|"+configPay.getOper()+"|"+oper.getRefOld()
+          String trameOper = configPay.getPrefixe()+oper.getClient()+"|"+configPay.getIdfacturier()+"|"+"REF"+log.getrRfExtdate()+"|"+configPay.getOper()+"|"+oper.getRefOld()
                  +"|"+oper.getCompteDebit()+"|"+configPay.getCompte()+"|"+oper.getMntOper()+"|"+oper.getMntFacture()+"|"+oper.getMntFrais()+"|"+oper.getMntFraisMarchand()
                  +"|"+oper.getMntTimbre()+"|PMT FACTURE"+oper.getFacturier()+" "+configPay.getOper()+" par "+oper.getClient()+" du "+log.formatageDateHeure()+"|";
        
@@ -224,24 +229,126 @@ public class InterfaceEfactureWS {
                          
                      }
                      else {
-                           resultat = "{\"RESULTSET\":[{\"Statut\":\"0\",\"StatutMsg\":\"DEMANDE ACCEPTE\",\"StatutData\":[{Erreur:\"ERREUR DE TRITEMENT\"}]}]}";
+                           resultat = "{\"RESULTSET\":[{\"Statut\":\"1\",\"StatutMsg\":\"DEMANDE ACCEPTE\",\"StatutData\":[{Erreur:\"ERREUR DE TRITEMENT\"}]}]}";
                           log=new AppLogger("Problème ouverture du port WS T24 ==> méthode: InterfaceEfactureWS.setCompta ===> "+new AppLogger().formatageDateHeure());
                          
                      }
 
 
             } catch(Exception ex) {
-                resultat = "{\"RESULTSET\":[{\"Statut\":\"0\",\"StatutMsg\":\"DEMANDE ACCEPTE\",\"StatutData\":[{Erreur:\"ERREUR DE TRITEMENT\"}]}]}";
+                resultat = "{\"RESULTSET\":[{\"Statut\":\"1\",\"StatutMsg\":\"DEMANDE ACCEPTE\",\"StatutData\":[{Erreur:\"ERREUR DE TRITEMENT\"}]}]}";
                 log=new AppLogger("Erreur WS T24 ==> méthode: InterfaceEfactureWS.setCompta ===> "+new AppLogger().formatageDateHeure()+" ==>"+ex.getMessage());
                 
                
             }
+         
+            String resultatT24 = getRefTransaction(resultat,"REF"+log.getrRfExtdate());
            
+           
+        return resultatT24;
+
+    }
+    
+    // fin comptabilisation
+    
+    
+    // anniulation ecriture
+     @SuppressWarnings({"UnusedAssignment", "UseSpecificCatch"})
+    public String setAnnulT24(AnnulTransT24 operAnnul ) throws ParseException, IOException{
+    //    TransactionT24 oper = new TransactionT24();
+        ConfigPay configPay = new ConfigPay(operAnnul.getFacturier());
+        ConfigInfos userT24Info = new ConfigInfos();
+        AppLogger log = new AppLogger();
+        String resultat=null;String retour=null;
+     
+          String   trameOper = "ANNUL|A|W|"+userT24Info.getT24useref()+"|"+configPay.getIdfacturier()+"|"+operAnnul.getDateOper()+"|"+operAnnul.getRefExterne()+"|"+operAnnul.getRefFTSib();
+        //System.out.println(" Tramme nenvoyé :"+trameOper);      
+       
+       
+       
+         EnquiryInputCollection enqColl = objfact.createEnquiryInputCollection();
+         enqColl.setColumnName("EFACTURE.REQUEST");
+         enqColl.setCriteriaValue(trameOper);
+         enqColl.setOperand("EQ");
+         EnquiryInput enqIn;enqIn = objfact.createEnquiryInput();
+         enqIn.getEnquiryInputCollection().add(enqColl);
+         Holder<List<TNAEFACTUREMAINType>>  tnaefacturemaintype0= new Holder<>();
+         Holder<Status> status = new Holder<>();SuccessIndicator succes = null;
+         
+
+           try {
+                        t24port.tnaefacturemain(wrqc, enqIn, status, tnaefacturemaintype0);
+                     if(status.value.getSuccessIndicator().equals(SuccessIndicator.SUCCESS)){
+                         resultat = tnaefacturemaintype0.value.get(0).getGTNAEFACTUREMAINDetailType().getMTNAEFACTUREMAINDetailType().get(0).getREPONSEEFACTURE();
+                         
+                     }
+                     else {
+                           resultat = "{\"RESULTSET\":[{\"Statut\":\"1\",\"StatutMsg\":\"DEMANDE ACCEPTE\",\"StatutData\":[{Erreur:\"ERREUR DE TRITEMENT\"}]}]}";
+                          log=new AppLogger("Problème ouverture du port WS T24 ==> méthode: InterfaceEfactureWS.setCompta ===> "+new AppLogger().formatageDateHeure());
+                         
+                     }
+
+
+            } catch(Exception ex) {
+                resultat = "{\"RESULTSET\":[{\"Statut\":\"1\",\"StatutMsg\":\"DEMANDE ACCEPTE\",\"StatutData\":[{Erreur:\"ERREUR DE TRITEMENT\"}]}]}";
+                log=new AppLogger("Erreur WS T24 ==> méthode: InterfaceEfactureWS.setAnnulT24 ===> "+new AppLogger().formatageDateHeure()+" ==>"+ex.getMessage());
+                
+               
+            }
+           
+        
         return resultat;
 
     }
 
 
+    
+    private String getRefTransaction(String retourJson,String refExterne) throws ParseException{
+        String msgStatut = getCodeRetour(retourJson);
+        String resultat = "{\"statut\":1,\"Nooper\":\"}";
+        String refop = null;
+            try {
+                    JSONObject opers = new JSONObject(retourJson);
+                    JSONArray oper1 = opers.getJSONArray("RESULTSET");
+                    
+                    if (msgStatut.equals("0")){  
+                        JSONObject oper2 = new JSONObject(oper1.getString(0));
+                        JSONArray oper3 = oper2.getJSONArray("StatutData");
+                        JSONObject oper4 = new JSONObject(oper3.getString(0));
+                        refop = oper4.getString("Nooper");   
+                    //    resultat = "{\"statut\":0,\"Nooper\":\""+refop.substring(0, refop.indexOf("|"))+"\"}";
+                        resultat = "{\"statut\": 0,\"Nooper\": \""+refop.substring(0, refop.indexOf("|"))+"\",\"refExterne\": \""+refExterne+"\"}";
+                      //  resultat = "{"\"statut\":\"1,\"\"+Nooper\": "+"\""+oper4.getString("Nooper")+"\"}";
+                      }   
+                    if (msgStatut.equals("1")){
+                        JSONObject trans1 = new JSONObject(oper1.getString(0));                        
+                      //  System.out.println(trans1);
+                        resultat = "{\"statut\":1,\"Nooper\":\""+trans1.getString("StatutMsg")+"\"}";
+                    }
+                    
+            } catch (Exception e) {
+                log = new AppLogger("Erreur de traitement de la tramme retour ==> Methode: ServiceResultatJson.getRefTransaction ==> "+new AppLogger().formatageDateHeure());
+                e.printStackTrace();
+            }
+     
+  
+        return resultat;
+    }
+    
+    
+     private String getCodeRetour(String msgRetour){
+        try {
+            JSONObject msg = new JSONObject(msgRetour);
+            JSONArray msgs  = msg.getJSONArray("RESULTSET");
+            JSONObject rMsg = new JSONObject(msgs.getString(0));
+            String resultat = rMsg.getString("Statut");
+            return resultat;
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(ServiceResultatJson.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "1";
+    }
 
 
     

@@ -22,10 +22,12 @@ import org.json.JSONObject;
  *
  * @author yacou.kone
  */
+
+  @SuppressWarnings("UnusedAssignment")
 public class AppNmpf {
     private String token;
-    private AppGestToken gesToken;
-    private ConfigPay configFact;
+    private  AppGestToken gesToken;
+    private  ConfigPay configFact;
 
     public ConfigPay getConfigFact() {
         return configFact;
@@ -35,18 +37,22 @@ public class AppNmpf {
     
     
     public AppNmpf(String facturier){
-        configFact = new ConfigPay(facturier);
-        gesToken = new AppGestToken(facturier);
-        this.token = gesToken.obtenirToken(configFact);
+        this.configFact = new ConfigPay(facturier);
+        this.gesToken = new AppGestToken(facturier);
+        this.token = gesToken.obtenirToken(this.configFact);
+        
+      // this.token = gesToken.obtenirToken(this.configFact);
       // this.token="Nf6zN34QoVkA9_G9tpAstqMdN372fdr0C5ppDL7HRHe-w6PKtqtQevqqvKQA8WRcA4L-zAB_bhuQ4P_zCLBYRO8nMQnDwwY69I5aiFTBTmr1_YuaI6XfZRm8LBKB4DeoB0YCAMelokeUgqTXRov57OjzbsuOzY5qzbxO9842D3FXXCRCGHnsvtYIaV3BTqTeIL_J78Fet6CAeKlaWPQHFjyF7qkkEY5wBkKdEE8IpsJHsrA3tizAVtAtV588jDVbitxcp4ivXsiZ_EVbY64aRw";
         
       //  configSODECI =new ConfigPay(facturier); 
     }
          
      //consultation de facture CIE
-     public String consulterFactureCIE(String facture){         
-          String resultathttp = "{\"CodeTraitement\":1,\"MessageTraitement\":\"Echec de traitement\"}";
-           Client client = Client.create(new DefaultClientConfig());
+     public String consulterFactureCIE(String facture){      
+       
+         String resultathttp = "{\"CodeTraitement\":1,\"MessageTraitement\":\"Echec de traitement\"}";
+        
+         Client client = Client.create(new DefaultClientConfig());
          URI uri = UriBuilder.fromUri(getConfigFact().getUrl()+"/api/nmpf/consultation?RefContrat="+facture).build();
          ClientResponse reponse = client.resource(uri).header("Authorization", "Bearer "+this.token).get(ClientResponse.class);  
          if(reponse.getStatus()==200){
@@ -56,8 +62,7 @@ public class AppNmpf {
          {
              resultathttp = "{\"CodeTraitement\":1,\"MessageTraitement\":\"Echec de traitement : "+reponse.getStatus()+"==>"+reponse.getStatusInfo()+"\"}";
          }
-             
-         
+          
         return resultathttp;
      }
      

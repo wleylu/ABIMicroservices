@@ -10,6 +10,7 @@ import com.atware.log.AppLogger;
 
 import com.atware.controller.InterfaceEfactureWS;
 import com.google.gson.Gson;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.atware.bean.Client;
 import org.atware.bean.Comptes;
+import org.atware.bean.ConfigInfos;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +31,7 @@ public class ServiceResultatJson {
     private AppLogger log;
    
     
+    @SuppressWarnings({"null", "IndexOfReplaceableByContains"})
     public String getClientInfos(String json){
 
        
@@ -36,13 +39,18 @@ public class ServiceResultatJson {
         List<Comptes> cpts = new ArrayList<>();
         Comptes cpt = null;
         String msgStatut = getCodeRetour(json);
-          
-       
+        ConfigInfos config=null;
+        try {
+            config = new ConfigInfos();
+        } catch (IOException ex) {
+            Logger.getLogger(ServiceResultatJson.class.getName()).log(Level.SEVERE, null, ex);
+        }
             
         
                 JSONObject jsonobject=null;                
 
                         try {
+                           
                              jsonobject = new JSONObject(json);
                              JSONArray client1 =  jsonobject.getJSONArray("RESULTSET");
                                if (msgStatut.equals("0"))
@@ -50,7 +58,7 @@ public class ServiceResultatJson {
                                    JSONObject client2 = new JSONObject(client1.getString(0));
                                    JSONArray client3 = client2.getJSONArray("StatutData");                               
                                    JSONObject infosClient = new JSONObject(client3.getString(0));
-
+                                   
                                    client.setClient(infosClient.getString("Client"));
                                    client.setAgec(infosClient.getString("Agec"));
                                    client.setDateDeLivr(infosClient.getString("DateDeLivr"));
@@ -72,15 +80,30 @@ public class ServiceResultatJson {
                                    for (int i = 0; i< comptes.length(); i++){
                                        JSONObject cpte = comptes.getJSONObject(i);                                   
                                        cpt = new Comptes();
+                                       //String ncg =config.getCategory();
+                                       
+                                       if (config.getCategory().indexOf(cpte.getString("Ncg")) > -1 ){
+                                            cpt.setCompte(cpte.getString("Compte"));
+                                            cpt.setAgence(cpte.getString("Agence"));
+                                            cpt.setNcg(cpte.getString("Ncg"));
+                                            cpt.setLibNcg(cpte.getString("Libncg"));
+                                            cpt.setCoddci(cpte.getString("Coddci"));
+                                            cpt.setExpl(cpte.getString("Expl"));
 
-                                       cpt.setCompte(cpte.getString("Compte"));
-                                       cpt.setAgence(cpte.getString("Agence"));
-                                       cpt.setNcg(cpte.getString("Ncg"));
-                                       cpt.setLibNcg(cpte.getString("Libncg"));
-                                       cpt.setCoddci(cpte.getString("Coddci"));
-                                       cpt.setExpl(cpte.getString("Expl"));
+                                            cpts.add(cpt);
+                                       }
+                                       
+                                        if (config.getCategory().equals("*")){
+                                            cpt.setCompte(cpte.getString("Compte"));
+                                            cpt.setAgence(cpte.getString("Agence"));
+                                            cpt.setNcg(cpte.getString("Ncg"));
+                                            cpt.setLibNcg(cpte.getString("Libncg"));
+                                            cpt.setCoddci(cpte.getString("Coddci"));
+                                            cpt.setExpl(cpte.getString("Expl"));
 
-                                       cpts.add(cpt);
+                                            cpts.add(cpt);
+                                       }
+                                      
                                   
                                }    
                                    

@@ -6,12 +6,11 @@
 package com.atware.controller;
 
 import com.atware.log.AppLogger;
-import com.atware.utils.CrytageDonnees;
-import com.atware.utils.GenerateToken;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import java.net.URI;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,15 +20,19 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
 import org.atware.bean.ConfigPay;
+import org.atware.jdbc.ConnexionEfacture;
 import org.json.JSONObject;
 
 /**
  *
  * @author yacou.kone
  */
+
+ @SuppressWarnings({"UseSpecificCatch", "CallToPrintStackTrace","UnusedAssignment"})
 public class AppGestToken {
-    private ConfigPay infoFacturier;
-    private AppLogger appLoger;
+  
+    private final ConfigPay infoFacturier;
+    private final AppLogger appLoger;
 //    private CrytageDonnees crypDonne;
 //    private GenerateToken validToken;
 
@@ -48,9 +51,12 @@ public class AppGestToken {
     
     
     //obtenir le token pour le traitement
-    public String obtenirToken(ConfigPay facturier){
+   
+     public String obtenirToken(ConfigPay facturier){
+               
         String sql = String.format("SELECT datefin, heurefin,token_valid FROM egestoken where facturier= ?") ;
         String resultat = null;
+        ConnexionEfacture conect = new ConnexionEfacture(facturier.getFacturier());
         String newToken = null;
         String v_token = null;
         int datefin,datj,heurefin,heurej =0;
@@ -60,33 +66,39 @@ public class AppGestToken {
         try {
             datj= appLoger.formatDateFacture(1);
             heurej = appLoger.formatDateFacture(2);
-            conx = maConnexion();
+            conx = conect.maConnexion();
+          
             ps = conx.prepareStatement(sql);
             ps.setString(1, facturier.getFacturier());
+            
             rs =ps.executeQuery();
             if (rs.next()){
             
+                System.out.println("je uis ICI");
+                
                 datefin = Integer.parseInt(rs.getString(1));
                 heurefin = Integer.parseInt(rs.getString(2));
                 v_token = rs.getString(3);
                 
             
                 if (datj < datefin ){
+                      System.out.println("ICI 1");
                     resultat = v_token;
                     
                 }
                 else if ((datj==datefin) && (heurej+5 < heurefin)) {
-                   
+                     System.out.println("ICI 2");
                     resultat = v_token;
                 }
                 else if ((datj==datefin) && (heurej+5 > heurefin)) {
+                      System.out.println("ICI 3");
                   
                     newToken = getNmpfToken();
                     ajoutToken(facturier.getFacturier(), newToken,conx);
                     resultat = getTokenJson(newToken);
                 }
                 else {
-                    
+                      System.out.println("ICI 4");
                    newToken = getNmpfToken();
                    ajoutToken(facturier.getFacturier(), newToken,conx);
                    resultat = getTokenJson(newToken);
@@ -98,8 +110,10 @@ public class AppGestToken {
             else
             {
              
-                   newToken = getNmpfToken();
-                   ajoutToken(facturier.getFacturier(), newToken,conx);
+                  
+                 newToken = getNmpfToken();
+                 ajoutToken(facturier.getFacturier(), newToken,conx);                                     
+                  
                    resultat = getTokenJson(newToken);
             }
         conx.close();
@@ -110,76 +124,69 @@ public class AppGestToken {
     }
     
     //enregistrement du token dans la base de données
-    private  void ajoutToken(String facturier,String monToken,Connection cx){
-        AppLogger appLoger = new AppLogger();
+    private  void ajoutToken(String facturier,String monToken, Connection connect){
+     //   AppLogger appLoger = new AppLogger();
       //  Connection con = null;
-         AppNmpf nmpf = new AppNmpf(facturier);
-
-         String sql = String.format("INSERT INTO egestoken(token_valid, datedebut, datefin, heurefin, facturier,expires_in) "
-                 + "VALUES ( ?,?, ?, ?, ?, ?)");
-         String sql1 = String.format("SELECT  facturier FROM egestoken where facturier = ?");
-         String sqlupdate = String.format ("UPDATE egestoken SET token_valid=?, datedebut=?, datefin=?, heurefin=?, "
-                 + " expires_in=? WHERE facturier=?");
-         PreparedStatement ps,ps1 = null;
+         AppNmpf nmpf = new AppNmpf(facturier);       
+       
+         PreparedStatement ps,ps1,ps2 = null;
          ResultSet rs = null;
-         
+                  
          JSONObject json = null;
          
          try {
+             
             json = new JSONObject(monToken);
             
-          //   System.out.println(json.getString("token_type"));
-           // con = maConnexion();
-            ps1 = cx.prepareStatement(sql1);
+             String sql1 = String.format("SELECT  facturier FROM egestoken where facturier = ?");
+            ps1 = connect.prepareStatement(sql1);
             ps1.setString(1, facturier);
             rs = ps1.executeQuery();
-            if (rs.next()){
-                ps = cx.prepareStatement(sqlupdate);
-                ps.setString(1, json.getString("access_token"));
-                ps.setString(2, appLoger.formatDateFacture(1,json.getString(".issued")));
-                ps.setString(3, appLoger.formatDateFacture(1,json.getString(".expires")));
-                ps.setString(4, appLoger.formatDateFacture(2,json.getString(".expires")));
-                ps.setInt(5, Integer.parseInt(json.getString("expires_in")));
-                ps.setString(6, facturier);
+            if (rs.next()){    
+                  String sqlupdate = String.format ("UPDATE egestoken SET token_valid=?, datedebut=?, datefin=?, heurefin=?, "
+                 + " expires_in=?,heuredebut WHERE facturier=?");
+                  
+                ps2 = connect.prepareStatement(sqlupdate);
+                ps2.setString(1, json.getString("access_token"));
+                ps2.setString(2, appLoger.formatDateFacture(1,json.getString(".issued")));
+                ps2.setString(3, appLoger.formatDateFacture(1,json.getString(".expires")));
+                ps2.setString(4, appLoger.formatDateFacture(2,json.getString(".expires")));
+                ps2.setInt(5, Integer.parseInt(json.getString("expires_in")));
+                ps2.setString(6, appLoger.formatDateFacture(2,json.getString(".issued")));
+                ps2.setString(7, facturier);
                               
-                ps.executeUpdate();
+                ps2.executeUpdate();
              
             }
             else
             {
-                ps = cx.prepareStatement(sql);
+               String  sql = String.format("INSERT INTO egestoken(token_valid, datedebut, datefin,heuredebut,facturier, heurefin,expires_in) "
+                 + "VALUES ( ?,?, ?, ?, ?, ?,?)");
+                
+                ps = connect.prepareStatement(sql);
                 ps.setString(1, json.getString("access_token"));
                 ps.setString(2, appLoger.formatDateFacture(1,json.getString(".issued")));
                 ps.setString(3, appLoger.formatDateFacture(1,json.getString(".expires")));
-                ps.setString(4, appLoger.formatDateFacture(2,json.getString(".expires")));
+                ps.setString(4, appLoger.formatDateFacture(2,json.getString(".issued")));
                 ps.setString(5, facturier);
-                ps.setInt(6, Integer.parseInt(json.getString("expires_in")));
+                ps.setString(6, appLoger.formatDateFacture(2,json.getString(".expires")));                
+                ps.setString(7, json.getString("expires_in"));               
                 
-                ps.execute();
+                ps.execute();             
                 
+             
             }
          } catch (Exception e) {
+             System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
+   
     
-    //connexion à la base de données
-    private Connection maConnexion(){
-        Connection con =null;
-        
-        try {
-            
-            Class.forName(getInfoFacturier().getDbdriver());
-            con = DriverManager.getConnection(getInfoFacturier().getDbUrl(), getInfoFacturier().getDbuser(), getInfoFacturier().getDbpassword());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return con;
-    }
-    
-    //génération d'un Token
+//génération d'un Token
       private String getNmpfToken(){
          String resultathttp = null;
+        
          Client client = Client.create(new DefaultClientConfig());
          MultivaluedMap<String,String> map = new MultivaluedHashMap<>();
           map.add("Grant_type", "password");
@@ -194,12 +201,15 @@ public class AppGestToken {
          }
          else
              resultathttp = "Erreur de traitement :"+reponse.getStatus();
-        
+       
          
+         //resultathttp ="{\"access_token\":\"aAQyeCR2wOe3XflN0Pj1HkRMxbwXO0iKAE6XXwa9_VirbkJjtPX1K_rDOsorTG9lLGR1oKUNJG26Z7Ep3wh4bU5ARaIFwNPJrWHTbdFL4dKJ8CFoCSDcymITkkIvmM0MPYoeCtCOTFnkusT1KC0yj5jTmxxBdS0iddpUdPLMJL-av81DcccmJaudBMRrgpffN4IdxXakRabkHxrHthmF314uZxkUtM1KZhv63fKc2J5hxYV3rIEoGWtZcr2T1aBBZ3xvbMqdmyLf6THl8lepMA\",\"token_type\":\"bearer\",\"expires_in\":35999,\"userName\":\"P05\",\".issued\":\"Mon, 09 May 2022 14:59:41 GMT\",\".expires\":\"Tue, 10 May 2022 00:59:41 GMT\"}";
+                  
         return resultathttp;
      }
       
       //convertion du json pour ramener le token valide
+    @SuppressWarnings("StringEquality")
        private String getTokenJson(String txtjson) {
          if (txtjson != ""){
                     JSONObject json = null;
