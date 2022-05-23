@@ -144,7 +144,7 @@ public class AppGestToken {
             rs = ps1.executeQuery();
             if (rs.next()){    
                   String sqlupdate = String.format ("UPDATE egestoken SET token_valid=?, datedebut=?, datefin=?, heurefin=?, "
-                 + " expires_in=?,heuredebut WHERE facturier=?");
+                 + " expires_in=?,heuredebut=? WHERE facturier=?");
                   
                 ps2 = connect.prepareStatement(sqlupdate);
                 ps2.setString(1, json.getString("access_token"));
@@ -203,7 +203,7 @@ public class AppGestToken {
              resultathttp = "Erreur de traitement :"+reponse.getStatus();
        
          
-         //resultathttp ="{\"access_token\":\"aAQyeCR2wOe3XflN0Pj1HkRMxbwXO0iKAE6XXwa9_VirbkJjtPX1K_rDOsorTG9lLGR1oKUNJG26Z7Ep3wh4bU5ARaIFwNPJrWHTbdFL4dKJ8CFoCSDcymITkkIvmM0MPYoeCtCOTFnkusT1KC0yj5jTmxxBdS0iddpUdPLMJL-av81DcccmJaudBMRrgpffN4IdxXakRabkHxrHthmF314uZxkUtM1KZhv63fKc2J5hxYV3rIEoGWtZcr2T1aBBZ3xvbMqdmyLf6THl8lepMA\",\"token_type\":\"bearer\",\"expires_in\":35999,\"userName\":\"P05\",\".issued\":\"Mon, 09 May 2022 14:59:41 GMT\",\".expires\":\"Tue, 10 May 2022 00:59:41 GMT\"}";
+        // resultathttp ="{\"access_token\":\"aAQyeCR2wOe3XflN0Pj1HkRMxbwXO0iKAE6XXwa9_VirbkJjtPX1K_rDOsorTG9lLGR1oKUNJG26Z7Ep3wh4bU5ARaIFwNPJrWHTbdFL4dKJ8CFoCSDcymITkkIvmM0MPYoeCtCOTFnkusT1KC0yj5jTmxxBdS0iddpUdPLMJL-av81DcccmJaudBMRrgpffN4IdxXakRabkHxrHthmF314uZxkUtM1KZhv63fKc2J5hxYV3rIEoGWtZcr2T1aBBZ3xvbMqdmyLf6THl8lepMA\",\"token_type\":\"bearer\",\"expires_in\":35999,\"userName\":\"P05\",\".issued\":\"Mon, 09 May 2022 14:59:41 GMT\",\".expires\":\"Tue, 10 May 2022 00:59:41 GMT\"}";
                   
         return resultathttp;
      }

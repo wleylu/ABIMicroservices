@@ -3,16 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="2"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Projets/ABIMicroservices/src/java/com/atware/controller/InterfaceEfactureWS.java</file>
-            <file>file:/C:/Projets/ABIMicroservices/src/java/com/atware/utils/ServiceResultatJson.java</file>
             <file>file:/C:/Projets/ABIMicroservices/src/java/org/atware/ressources/jsonpay.json</file>
             <file>file:/C:/Projets/ABIMicroservices/src/java/com/atware/controller/AppNmpf.java</file>
-            <file>file:/C:/Projets/ABIMicroservices/src/java/org/atware/ressources/config.properties</file>
-            <file>file:/C:/Projets/ABIMicroservices/src/java/com/atware/controller/AppEfactureWST24.java</file>
-            <file>file:/C:/Projets/ABIMicroservices/src/java/org/atware/bean/RefAnnulation.java</file>
-            <file>file:/C:/Projets/ABIMicroservices/src/java/com/abi/microservices/ServicesResource.java</file>
-            <file>file:/C:/Projets/ABIMicroservices/src/java/org/atware/bean/AnnulTransT24.java</file>
-            <file>file:/C:/Projets/ABIMicroservices/src/java/com/abi/microservices/ApiNMPFServices.java</file>
+            <file>file:/C:/Projets/ABIMicroservices/src/java/org/atware/jdbc/ConnexionEfacture.java</file>
+            <file>file:/C:/Projets/ABIMicroservices/src/java/com/atware/controller/AppGestToken.java</file>
         </group>
     </open-files>
 </project-private>
