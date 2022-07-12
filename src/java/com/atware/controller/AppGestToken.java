@@ -72,33 +72,30 @@ public class AppGestToken {
             ps.setString(1, facturier.getFacturier());
             
             rs =ps.executeQuery();
-            if (rs.next()){
-            
-                System.out.println("je uis ICI");
-                
+            if (rs.next()){            
+              
                 datefin = Integer.parseInt(rs.getString(1));
                 heurefin = Integer.parseInt(rs.getString(2));
                 v_token = rs.getString(3);
                 
             
                 if (datj < datefin ){
-                      System.out.println("ICI 1");
+                    
                     resultat = v_token;
                     
                 }
                 else if ((datj==datefin) && (heurej+5 < heurefin)) {
-                     System.out.println("ICI 2");
+                    
                     resultat = v_token;
                 }
                 else if ((datj==datefin) && (heurej+5 > heurefin)) {
-                      System.out.println("ICI 3");
-                  
+                    
                     newToken = getNmpfToken();
                     ajoutToken(facturier.getFacturier(), newToken,conx);
                     resultat = getTokenJson(newToken);
                 }
                 else {
-                      System.out.println("ICI 4");
+                     
                    newToken = getNmpfToken();
                    ajoutToken(facturier.getFacturier(), newToken,conx);
                    resultat = getTokenJson(newToken);
